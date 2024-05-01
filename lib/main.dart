@@ -1,125 +1,165 @@
 import 'package:flutter/material.dart';
-
+List<String> semestre =["AGO-DIC2023","ENE-JUN2023","ENE-JUN2024","AGO-DIC2024","ENE-JUN2022","AGO-DIC20242"];
 void main() {
-  runApp(const MyApp());
+  runApp(MaterialApp(home: control_tarea(),debugShowCheckedModeBanner: false,));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class control_tarea extends StatefulWidget {
+  const control_tarea({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<control_tarea> createState() => _control_tareaState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _control_tareaState extends State<control_tarea> {
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+
+  var txtsemestre = semestre.first;
+  final txtidmateria = TextEditingController();
+  final txtnombre = TextEditingController();
+  final txtdocente = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text(
+          "TAREAS",
+          style: TextStyle(
+            color: Colors.white, // Color del texto
+            fontSize: 24, // Tamaño de la fuente
+            fontWeight: FontWeight.bold, // Peso de la fuente
+            fontStyle: FontStyle.italic, // Estilo de la fuente
+            letterSpacing: 1.5, // Espaciado entre letras
+            // Otros estilos que desees añadir
+          ),
+        ),
+          backgroundColor: Colors.deepOrange,
+          elevation: 0,
+          centerTitle: true,
+          toolbarHeight: 80,
+
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+      body: Container(
+        color: Colors.black, // Establece el color de fondo del cuerpo a negro
+        child: Center(
+
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      drawer: Drawer(
+        child: Container(
+          color: Colors.deepOrange, // Color de fondo del Drawer
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.deepOrange,
+                ),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children:[
+                    CircleAvatar(
+                      radius: 50,
+                      child: Icon(Icons.book,size: 60,),
+                    ),
+                    Text('Menú', style: TextStyle(color: Colors.white, fontSize: 24,),),
+                  ]
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.add, color: Colors.white),
+                title: Text('Agregar Materia', style: TextStyle(color: Colors.white,fontSize: 18)),
+                onTap: () {
+                  Navigator.pop(context);
+                  AgregarMateria1();
+                },
+              ),
+              Divider(color: Colors.white,)
+            ],
+          ),
+        ),
+      ),
     );
   }
+
+  void AgregarMateria1() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.blueGrey.shade800,
+          child: Container(
+            padding: EdgeInsets.all(15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child:
+                  Text('Agregar Nueva Materia', style: TextStyle(color: Colors.white, fontSize: 18)),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: txtidmateria,
+                  decoration: InputDecoration(
+                    labelText: "ID Materia",
+                    suffixIcon: Icon(Icons.book),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: txtnombre,
+                  decoration: InputDecoration(
+                    labelText: "Nombre",
+                    suffixIcon: Icon(Icons.school_sharp),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: txtdocente,
+                  decoration: InputDecoration(
+                    labelText: "Docente",
+                    suffixIcon: Icon(Icons.person_pin_rounded),
+                  ),
+                ),
+                SizedBox(height: 20),
+              DropdownButtonFormField(
+                  icon: const Icon(Icons.access_time),
+                  value: txtsemestre,
+                  items: semestre.map((e) {
+                    return DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    );
+                    }).toList(),
+                  onChanged: (value) => txtsemestre = value!),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Acción al presionar el botón de agregar
+                      },
+                      child: Text('Agregar'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Cancelar'),
+                    ),
+                  ],
+                ),
+
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
 }
