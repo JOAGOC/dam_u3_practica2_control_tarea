@@ -24,10 +24,9 @@ class GUIMateria {
         return Dialog(
           backgroundColor: Estilo.fondoDialogo,
           child: Container(
-            padding: Estilo.paddingDialogo,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            height: 450,
+            child: ListView(
+              padding: Estilo.paddingDialogo,
               children: [
                 Center(
                   child: Text('Agregar Nueva Materia',
@@ -37,28 +36,37 @@ class GUIMateria {
                 TextField(
                   controller: txtidmateria,
                   decoration: InputDecoration(
-                    labelText: "ID Materia",
+                    labelText: "ID Materia" ,
+                    labelStyle: Estilo.labelstyleField,
                     suffixIcon: Icon(Icons.book),
                   ),
+                  style: Estilo.labelstyleorange,
                 ),
                 Estilo.espacioEntreCampos,
                 TextField(
                   controller: txtnombre,
                   decoration: InputDecoration(
                     labelText: "Nombre",
+                    labelStyle: Estilo.labelstyleField,
                     suffixIcon: Icon(Icons.school_sharp),
                   ),
+                  style: Estilo.labelstyleorange,
                 ),
                 Estilo.espacioEntreCampos,
                 TextField(
                   controller: txtdocente,
                   decoration: InputDecoration(
                     labelText: "Docente",
+                    labelStyle: Estilo.labelstyleField,
                     suffixIcon: Icon(Icons.person_pin_rounded),
                   ),
+                  style: Estilo.labelstyleorange,
                 ),
                 Estilo.espacioEntreCampos,
+                Text("Semestre", style: Estilo.labelstyleField,),
                 DropdownButtonFormField(
+                  style: Estilo.labelstyleField,
+                    dropdownColor: Colors.black,
                     icon: const Icon(Icons.access_time),
                     value: txtsemestre,
                     items: semestre.map((e) {
@@ -73,6 +81,7 @@ class GUIMateria {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
+                      style: Estilo.estiloAceptarFormulario,
                       onPressed: () {
                         Materia m = Materia(
                             idmateria: txtidmateria.text,
@@ -81,14 +90,22 @@ class GUIMateria {
                             docente: txtdocente.text
                         );
                         DBMateria.registrar(m);
+                        Navigator.pop(context);
+                        txtidmateria.clear();
+                        txtdocente.clear();
+                        txtnombre.clear();
                       },
-                      child: Text('Agregar'),
+                      child: Text('Agregar',style:Estilo.estiloTextoBoton),
                     ),
                     ElevatedButton(
+                      style: Estilo.estiloCancelarFormulario,
                       onPressed: () {
                         Navigator.pop(context);
+                        txtidmateria.clear();
+                        txtdocente.clear();
+                        txtnombre.clear();
                       },
-                      child: Text('Cancelar'),
+                      child: Text('Cancelar',style: Estilo.estiloTextoBoton),
                     ),
                   ],
                 ),
