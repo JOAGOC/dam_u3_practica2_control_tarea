@@ -1,7 +1,6 @@
 import 'package:dam_u3_practica2_control_tarea/Interfaces/GUIMateria.dart';
-import 'package:dam_u3_practica2_control_tarea/Models/materia.dart';
 import 'package:flutter/material.dart';
-List<String> semestre =["AGO-DIC2023","ENE-JUN2023","ENE-JUN2024","AGO-DIC2024","ENE-JUN2022","AGO-DIC20242"];
+List<String> semestre = ["AGO-DIC2023","ENE-JUN2023","ENE-JUN2024","AGO-DIC2024","ENE-JUN2022","AGO-DIC20242"];
 void main() {
   runApp(MaterialApp(home: control_tarea(),debugShowCheckedModeBanner: false,));
 }
@@ -15,10 +14,13 @@ class control_tarea extends StatefulWidget {
 
 class _control_tareaState extends State<control_tarea> {
 
-
-
-
-  List<Materia> materia = [];
+  @override
+  void initState() {
+    super.initState();
+    GUIMateria.suscribir(()=>obtenerMaterias());
+    obtenerMaterias();
+    GUIMateria.context = context;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class _control_tareaState extends State<control_tarea> {
           color: Colors.deepOrange, // Color de fondo del Drawer
           child: ListView(
             padding: EdgeInsets.zero,
-            children: <Widget>[
+            children: [
               DrawerHeader(
                 decoration: BoxDecoration(
                   color: Colors.deepOrange,
@@ -73,11 +75,11 @@ class _control_tareaState extends State<control_tarea> {
                 title: Text('Agregar Materia', style: TextStyle(color: Colors.white,fontSize: 18)),
                 onTap: () {
                   Navigator.pop(context);
-                  GUIMateria.agregarMateria(context);
+                  GUIMateria.formularioMateria();
                 },
               ),
               Divider(color: Colors.white,),
-
+              ...listaMaterias
             ],
           ),
         ),
@@ -85,5 +87,17 @@ class _control_tareaState extends State<control_tarea> {
     );
   }
 
+  static List<Widget> listaMaterias = <Widget>[];
 
+  Future<void> obtenerMaterias() async {
+    var x = await GUIMateria.listarMaterias();
+    List<Widget> widgets = [];
+    for (var element in x) {
+      widgets.add(element);
+      widgets.add(Divider(color: Colors.white,));
+    }
+    setState(() {
+      listaMaterias = widgets;
+    });
+  }
 }
