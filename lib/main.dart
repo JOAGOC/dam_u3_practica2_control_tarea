@@ -1,6 +1,9 @@
 import 'package:dam_u3_practica2_control_tarea/Interfaces/GUIMateria.dart';
+import 'package:dam_u3_practica2_control_tarea/Models/materia.dart';
 import 'package:flutter/material.dart';
-List<String> semestre = ["AGO-DIC2023","ENE-JUN2023","ENE-JUN2024","AGO-DIC2024","ENE-JUN2022","AGO-DIC20242"];
+
+import 'Interfaces/Estilo.dart';
+List<String> semestre =["AGO-DIC2023","ENE-JUN2023","ENE-JUN2024","AGO-DIC2024","ENE-JUN2022","AGO-DIC20242"];
 void main() {
   runApp(MaterialApp(home: control_tarea(),debugShowCheckedModeBanner: false,));
 }
@@ -27,7 +30,7 @@ class _control_tareaState extends State<control_tarea> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "TAREAS",
+          "Control de Tareas",
           style: TextStyle(
             color: Colors.white, // Color del texto
             fontSize: 24, // Tamaño de la fuente
@@ -45,9 +48,19 @@ class _control_tareaState extends State<control_tarea> {
       ),
       body: Container(
         color: Colors.black, // Establece el color de fondo del cuerpo a negro
-        child: Center(
-
-        ),
+        child: ListView(
+              children:[
+                Text("TABLERO", style: Estilo.estiloMateriasDrawer),
+                Estilo.espacioEntreCampos,
+                Center(
+                    child: Text("Tareas de Hoy", style: Estilo.estiloMateriasDrawer)
+                ),
+                Estilo.espacioEntreCampos,
+                Estilo.lineaDivision,
+                Estilo.espacioEntreCampos,
+                CircleAvatar(child:Icon(Icons.book,size: 100),radius: 100,),
+              ]
+            ),
       ),
       drawer: Drawer(
         child: Container(

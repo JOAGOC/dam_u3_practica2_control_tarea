@@ -37,8 +37,8 @@ class DBTarea {
   static Future<List<TareasMateria>> consultarTareas() async {
     Database db = await ConnectionDB.openDB();
     var resultado = await db.rawQuery("""
-SELECT * FROM MATERIA,TAREA
-WHERE MATERIA.IDMATERIA = TAREA.IDMATERIA;
+    SELECT * FROM MATERIA,TAREA
+    WHERE MATERIA.IDMATERIA = TAREA.IDMATERIA;
       """);
     return List.generate(
         resultado.length,
@@ -51,4 +51,23 @@ WHERE MATERIA.IDMATERIA = TAREA.IDMATERIA;
             f_entrega: resultado[index]["F_ENTREGA"].toString(),
             descripcion: resultado[index]["DESCRIPCION"].toString()));
   }
+  static Future<List<TareasMateria>> consultarTareasEspecificas(Materia m) async {
+    Database db = await ConnectionDB.openDB();
+    var resultado = await db.query("""
+    SELECT * FROM MATERIA,TAREA
+    WHERE MATERIA.IDMATERIA = TAREA.IDMATERIA;
+      """, where:'IDMATERIA=?',whereArgs: [m.idmateria]);
+    return List.generate(
+        resultado.length,
+            (index) => TareasMateria(
+            idtarea: int.parse(resultado[index]["IDTAREA"].toString()),
+            idmateria: resultado[index]["IDMATERIA"].toString(),
+            nombre: resultado[index]["NOMBRE"].toString(),
+            semestre: resultado[index]["SEMESTRE"].toString(),
+            docente: resultado[index]["DOCENTE"].toString(),
+            f_entrega: resultado[index]["F_ENTREGA"].toString(),
+            descripcion: resultado[index]["DESCRIPCION"].toString()));
+  }
+
+
 }
