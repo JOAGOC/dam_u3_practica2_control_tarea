@@ -1,8 +1,8 @@
 - [] Investigar estructuras jerárquicas la GUI de flutter
 - [] Investigar el menú de opciones
-- [-] Archivo de conexion
-- [-] Hacer el GIU del CRUD Materia
-- [-] Hacer el CRUD de Materia
+- [X] Archivo de conexion
+- [X] Hacer el GIU del CRUD Materia
+- [X] Hacer el CRUD de Materia
 - [] Hacer el GIU del CRUD Tarea
 - [-] Hacer el CRUD de Tarea
 - [] Hacer la pantalla dashboard de "HOY"

@@ -1,11 +1,13 @@
 import 'package:dam_u3_practica2_control_tarea/Interfaces/GUIMateria.dart';
-import 'package:dam_u3_practica2_control_tarea/Models/materia.dart';
+import 'package:dam_u3_practica2_control_tarea/Interfaces/GUITarea.dart';
 import 'package:flutter/material.dart';
-
 import 'Interfaces/Estilo.dart';
-List<String> semestre =["AGO-DIC2023","ENE-JUN2023","ENE-JUN2024","AGO-DIC2024","ENE-JUN2022","AGO-DIC20242"];
+
 void main() {
-  runApp(MaterialApp(home: control_tarea(),debugShowCheckedModeBanner: false,));
+  runApp(MaterialApp(
+    home: control_tarea(),
+    debugShowCheckedModeBanner: false,
+  ));
 }
 
 class control_tarea extends StatefulWidget {
@@ -16,52 +18,37 @@ class control_tarea extends StatefulWidget {
 }
 
 class _control_tareaState extends State<control_tarea> {
+  int _index = 0;
+
+  Widget listaTareas = ListView();
 
   @override
   void initState() {
     super.initState();
-    GUIMateria.suscribir(()=>obtenerMaterias());
+    GUIMateria.suscribir(() => obtenerMaterias());
+    GUIMateria.escuchadorTarea = () => setState(() {
+          _index = 1;
+          consultarTarea();
+        });
     obtenerMaterias();
     GUIMateria.context = context;
+    GUITarea.context = context;
+    GUITarea.escuchador = () => consultarTarea();
+    consultarTarea();
+  }
+
+  void consultarTarea() async {
+    var lista = await GUITarea.listarTareas();
+    setState(() {
+      listaTareas = lista;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Control de Tareas",
-          style: TextStyle(
-            color: Colors.white, // Color del texto
-            fontSize: 24, // Tamaño de la fuente
-            fontWeight: FontWeight.bold, // Peso de la fuente
-            fontStyle: FontStyle.italic, // Estilo de la fuente
-            letterSpacing: 1.5, // Espaciado entre letras
-            // Otros estilos que desees añadir
-          ),
-        ),
-          backgroundColor: Colors.deepOrange,
-          elevation: 0,
-          centerTitle: true,
-          toolbarHeight: 80,
-
-      ),
-      body: Container(
-        color: Colors.black, // Establece el color de fondo del cuerpo a negro
-        child: ListView(
-              children:[
-                Text("TABLERO", style: Estilo.estiloMateriasDrawer),
-                Estilo.espacioEntreCampos,
-                Center(
-                    child: Text("Tareas de Hoy", style: Estilo.estiloMateriasDrawer)
-                ),
-                Estilo.espacioEntreCampos,
-                Estilo.lineaDivision,
-                Estilo.espacioEntreCampos,
-                CircleAvatar(child:Icon(Icons.book,size: 100),radius: 100,),
-              ]
-            ),
-      ),
+      appBar: buildAppBar(),
+      body: buildBody(),
       drawer: Drawer(
         child: Container(
           color: Colors.deepOrange, // Color de fondo del Drawer
@@ -74,24 +61,47 @@ class _control_tareaState extends State<control_tarea> {
                 ),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children:[
-                    CircleAvatar(
-                      radius: 50,
-                      child: Icon(Icons.book,size: 60,),
-                    ),
-                    Text('Menú', style: TextStyle(color: Colors.white, fontSize: 24,),),
-                  ]
-                ),
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        child: Icon(
+                          Icons.book,
+                          size: 60,
+                        ),
+                      ),
+                      Text(
+                        'Menú',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
+                      ),
+                    ]),
               ),
               ListTile(
+                leading: Icon(Icons.home, color: Colors.white),
+                title: Text('Home',
+                    style: Estilo.estiloMateriasDrawer),
+                onTap: () {
+                  Navigator.pop(context);
+                  setState(() {
+                    GUITarea.materiaSeleccionada=null;
+                    _index=0;
+                  });
+                  GUITarea.notify();
+                },
+              ),
+              Estilo.lineaDivision,
+              ListTile(
                 leading: Icon(Icons.add, color: Colors.white),
-                title: Text('Agregar Materia', style: TextStyle(color: Colors.white,fontSize: 18)),
+                title: Text('Agregar Materia',
+                    style: Estilo.estiloMateriasDrawer),
                 onTap: () {
                   Navigator.pop(context);
                   GUIMateria.formularioMateria();
                 },
               ),
-              Divider(color: Colors.white,),
+              Estilo.lineaDivision,
               ...listaMaterias
             ],
           ),
@@ -100,17 +110,30 @@ class _control_tareaState extends State<control_tarea> {
     );
   }
 
-  static List<Widget> listaMaterias = <Widget>[];
+  Widget buildBody() {
+    switch (_index) {
+      case 1:
+        return listaTareas;
+    }
+    return listaTareas;
+  }
 
+  AppBar buildAppBar() {
+    switch (_index) {
+      case 1:
+        return GUITarea.appBar();
+      default:
+        return Estilo.appBarGeneral('Tareas para Hoy');
+    }
+  }
+
+  static List<Widget> listaMaterias = [];
+
+  ///Lista Dinamica del Drawer
   Future<void> obtenerMaterias() async {
     var x = await GUIMateria.listarMaterias();
-    List<Widget> widgets = [];
-    for (var element in x) {
-      widgets.add(element);
-      widgets.add(Divider(color: Colors.white,));
-    }
     setState(() {
-      listaMaterias = widgets;
+      listaMaterias = Estilo.separar(x);
     });
   }
 }

@@ -12,6 +12,7 @@ class DBTarea {
   }
 
   static Future<int> modificar(Tarea t) async {
+    print(t);
     Database db = await ConnectionDB.openDB();
     return db.update('TAREA', t.toJSON(),
         where: 'IDTAREA=?', whereArgs: [t.idtarea]);
@@ -38,7 +39,8 @@ class DBTarea {
     Database db = await ConnectionDB.openDB();
     var resultado = await db.rawQuery("""
     SELECT * FROM MATERIA,TAREA
-    WHERE MATERIA.IDMATERIA = TAREA.IDMATERIA;
+    WHERE TAREA.F_ENTREGA = '${DateTime.now().toIso8601String().split('T')[0]}'
+    AND MATERIA.IDMATERIA = TAREA.IDMATERIA;
       """);
     return List.generate(
         resultado.length,
@@ -51,20 +53,15 @@ class DBTarea {
             f_entrega: resultado[index]["F_ENTREGA"].toString(),
             descripcion: resultado[index]["DESCRIPCION"].toString()));
   }
-  static Future<List<TareasMateria>> consultarTareasEspecificas(Materia m) async {
+  static Future<List<Tarea>> consultarTareasEspecificas(Materia m) async {
     Database db = await ConnectionDB.openDB();
-    var resultado = await db.query("""
-    SELECT * FROM MATERIA,TAREA
-    WHERE MATERIA.IDMATERIA = TAREA.IDMATERIA;
-      """, where:'IDMATERIA=?',whereArgs: [m.idmateria]);
+    var resultado = await db.query("TAREA", where:'IDMATERIA=?',whereArgs: [m.idmateria]);
+    print(resultado);
     return List.generate(
         resultado.length,
-            (index) => TareasMateria(
+            (index) => Tarea(
             idtarea: int.parse(resultado[index]["IDTAREA"].toString()),
             idmateria: resultado[index]["IDMATERIA"].toString(),
-            nombre: resultado[index]["NOMBRE"].toString(),
-            semestre: resultado[index]["SEMESTRE"].toString(),
-            docente: resultado[index]["DOCENTE"].toString(),
             f_entrega: resultado[index]["F_ENTREGA"].toString(),
             descripcion: resultado[index]["DESCRIPCION"].toString()));
   }

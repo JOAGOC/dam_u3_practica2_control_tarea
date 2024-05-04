@@ -1,4 +1,5 @@
 import 'package:dam_u3_practica2_control_tarea/DBDrivers/db_materia.dart';
+import 'package:dam_u3_practica2_control_tarea/Interfaces/GUITarea.dart';
 import 'package:dam_u3_practica2_control_tarea/Models/materia.dart';
 import 'package:flutter/material.dart';
 import 'Estilo.dart';
@@ -17,6 +18,7 @@ class GUIMateria {
   static final txtnombre = TextEditingController();
   static final txtdocente = TextEditingController();
   static List<void Function()> suscriptores = [];
+  static void Function() escuchadorTarea = () {};
   static late BuildContext context;
 
   static void suscribir(void Function() x) {
@@ -59,7 +61,7 @@ class GUIMateria {
                 decoration: InputDecoration(
                   labelText: "ID Materia",
                   labelStyle: Estilo.labelstyleField,
-                  suffixIcon: Icon(Icons.book),
+                  suffixIcon: Icon(Icons.book,color: Estilo.colorIconosListTile,),
                 ),
                 style: Estilo.labelstyleorange,
               ),
@@ -69,7 +71,7 @@ class GUIMateria {
                 decoration: InputDecoration(
                   labelText: "Nombre",
                   labelStyle: Estilo.labelstyleField,
-                  suffixIcon: Icon(Icons.school_sharp),
+                  suffixIcon: Icon(Icons.school_sharp,color: Estilo.colorIconosListTile,),
                 ),
                 style: Estilo.labelstyleorange,
               ),
@@ -79,7 +81,7 @@ class GUIMateria {
                 decoration: InputDecoration(
                   labelText: "Docente",
                   labelStyle: Estilo.labelstyleField,
-                  suffixIcon: Icon(Icons.person_pin_rounded),
+                  suffixIcon: Icon(Icons.person_pin_rounded,color: Estilo.colorIconosListTile),
                 ),
                 style: Estilo.labelstyleorange,
               ),
@@ -91,7 +93,7 @@ class GUIMateria {
               DropdownButtonFormField(
                   style: Estilo.labelstyleField,
                   dropdownColor: Colors.black,
-                  icon: const Icon(Icons.access_time),
+                  icon: const Icon(Icons.access_time,color: Estilo.colorIconosListTile),
                   value: txtsemestre,
                   items: semestre.map((e) {
                     return DropdownMenuItem(
@@ -145,6 +147,11 @@ class GUIMateria {
     return List.generate(
         materias.length,
         (index) => ListTile(
+              onTap: () {
+                GUITarea.materiaSeleccionada = materias[index];
+                escuchadorTarea();
+                Navigator.pop(context);
+              },
               title: Text(
                 materias[index].nombre,
                 style: Estilo.estiloMateriasDrawer,
@@ -179,7 +186,10 @@ class GUIMateria {
   }
 
   static void mensajeCRUD(String s) {
-    showDialog(context: context, builder:(context) => AlertDialog(content: Text(s)),);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(content: Text(s)),
+    );
   }
 
   static void eliminarMateria(Materia m) {

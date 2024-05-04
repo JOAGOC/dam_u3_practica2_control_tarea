@@ -3,7 +3,6 @@ class TareasMateria {
   String idmateria;
   String f_entrega;
   String descripcion;
-  String idmateria;
   String nombre;
   String semestre;
   String docente;
